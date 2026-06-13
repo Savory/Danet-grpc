@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package greeter;
+
+service Greeter {
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc Protected (HelloRequest) returns (HelloReply) {}
+  rpc Boom (HelloRequest) returns (HelloReply) {}
+  rpc Meta (HelloRequest) returns (HelloReply) {}
+  rpc Counter (HelloRequest) returns (HelloReply) {}
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply {
+  string message = 1;
+}

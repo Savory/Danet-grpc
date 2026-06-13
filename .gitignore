@@ -1,0 +1,4 @@
+node_modules/
+deno.lock
+coverage/
+.DS_Store
