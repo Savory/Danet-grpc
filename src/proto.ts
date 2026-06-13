@@ -5,6 +5,7 @@
  * optional alternative left to the user.
  */
 
+import type { Options } from '@grpc/proto-loader';
 import { grpc, protoLoader } from '../deps.ts';
 
 /**
@@ -14,12 +15,13 @@ import { grpc, protoLoader } from '../deps.ts';
  *
  * @param path - Filesystem path to the `.proto` file.
  * @param options - Optional `@grpc/proto-loader` overrides.
+ * @returns The loaded gRPC package definition (a tree of services and messages).
  */
 export function loadProto(
 	path: string,
-	options: protoLoader.Options = {},
+	options: Options = {},
 	// deno-lint-ignore no-explicit-any
-): grpc.GrpcObject | any {
+): any {
 	const packageDefinition = protoLoader.loadSync(path, {
 		keepCase: true,
 		longs: String,

@@ -9,13 +9,31 @@
 import type { DanetApplication } from '@danet/core';
 import { GRPC_SERVICE_METADATA } from './constants.ts';
 import { GrpcRouter } from './router.ts';
-import { grpc, type ServerCredentials } from '../deps.ts';
+import { grpc, type Server, type ServerCredentials } from '../deps.ts';
 
+/**
+ * Owns the underlying `grpc.Server`, registers itself as a Danet transport for
+ * `@GrpcController`s, and exposes the gRPC listener lifecycle. Construct it with
+ * a {@link DanetApplication} **before** calling `app.init()` so the transport
+ * can claim its controllers during bootstrap.
+ *
+ * @example
+ * ```typescript
+ * const app = new DanetApplication();
+ * const grpc = new GrpcServer(app);
+ * await app.init(AppModule);
+ * await grpc.listen(50051);
+ * ```
+ */
 export class GrpcServer {
 	/** The underlying `@grpc/grpc-js` server instance. */
-	public readonly server: grpc.Server;
+	public readonly server: Server;
 	private router: GrpcRouter;
 
+	/**
+	 * @param app - The Danet application this gRPC server attaches to. Must be
+	 * constructed before `app.init()` so gRPC controllers are routed here.
+	 */
 	constructor(app: DanetApplication) {
 		this.server = new grpc.Server();
 		this.router = new GrpcRouter(this.server);

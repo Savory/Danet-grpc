@@ -24,6 +24,7 @@ import { GRPC_METHOD_METADATA } from './constants.ts';
 import {
 	grpc,
 	type sendUnaryData,
+	type Server,
 	type ServerUnaryCall,
 	type ServiceDefinition,
 } from '../deps.ts';
@@ -76,14 +77,28 @@ function toGrpcError(error: unknown): { code: number; details: string } {
 	};
 }
 
+/**
+ * Registers gRPC controllers onto a `grpc.Server`, running each unary RPC
+ * through the full Danet pipeline (middleware → guards → param resolution →
+ * controller method → exception filters) with per-call request-scoped DI.
+ *
+ * Mirrors Danet's `WebSocketRouter`, reusing the same transport-agnostic
+ * executors. Usually you do not instantiate this directly — {@link GrpcServer}
+ * creates and wires one for you.
+ */
 export class GrpcRouter {
 	private logger: Logger = new Logger('GrpcRouter');
 	private guardExecutor: GuardExecutor;
 	private filterExecutor: FilterExecutor;
 	private middlewareExecutor: MiddlewareExecutor;
 
+	/**
+	 * @param server - The `@grpc/grpc-js` server that services are registered on.
+	 * @param injector - The Danet injector to resolve controllers from; defaults
+	 * to the shared application injector.
+	 */
 	constructor(
-		private server: grpc.Server,
+		private server: Server,
 		private injector: Injector = sharedInjector,
 	) {
 		this.guardExecutor = new GuardExecutor(this.injector);

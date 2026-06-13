@@ -1,6 +1,7 @@
 {
 	"name": "@danet/grpc",
-	"version": "0.1.0",
+	"version": "0.1.1",
+	"description": "Native gRPC transport for Danet — expose controllers as gRPC services, reusing Danet's DI, guards, middleware and exception filters.",
 	"license": "MIT",
 	"exports": {
 		".": "./mod.ts"
