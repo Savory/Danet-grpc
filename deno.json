@@ -21,7 +21,19 @@
 			"useTabs": true
 		},
 		"exclude": [
-			"./node_modules/"
+			"./node_modules/",
+			"./graphify-out/",
+			"./.claude/",
+			"./openspec/"
+		]
+	},
+	"publish": {
+		"exclude": [
+			"./spec",
+			".github",
+			"./graphify-out/",
+			"./.claude/",
+			"./openspec/"
 		]
 	},
 	"compilerOptions": {
